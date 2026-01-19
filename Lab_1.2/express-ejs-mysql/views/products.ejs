@@ -1,0 +1,39 @@
+<h2>Product Management</h2>
+<a href="/add">
+    <button style="margin-bottom: 10px; padding: 5px 15px; cursor: pointer;">
+        + Add New Product
+    </button>
+</a>
+<p>Xin chào, <b>
+        <%= user %>
+    </b>! <a href="/logout">Đăng xuất</a></p>
+
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Actions</th>
+    </tr>
+    <% products.forEach(p=> { %>
+        <tr>
+            <td>
+                <%= p.id %>
+            </td>
+            <td>
+                <%= p.name %>
+            </td>
+            <td>
+                <%= p.price %>
+            </td>
+            <td>
+                <%= p.quantity %>
+            </td>
+            <td>
+                <a href="/edit/<%= p.id %>">Edit</a> |
+                <a href="/delete/<%= p.id %>" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        <% }) %>
+</table>
