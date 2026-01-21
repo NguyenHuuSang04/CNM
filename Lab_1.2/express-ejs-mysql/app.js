@@ -10,6 +10,9 @@ app.set('views', './views');
 // 2. Middleware để xử lý dữ liệu từ Form (đọc dữ liệu POST)
 app.use(express.urlencoded({ extended: true })); 
 
+// 2.5. Cấu hình thư mục public cho CSS/JS/Images
+app.use(express.static('public'));
+
 // 3. Cấu hình Session (PHẢI ĐẶT TRƯỚC ROUTES)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'default-secret-key',

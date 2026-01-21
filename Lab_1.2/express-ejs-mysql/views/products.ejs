@@ -1,39 +1,103 @@
-<h2>Product Management</h2>
-<a href="/add">
-    <button style="margin-bottom: 10px; padding: 5px 15px; cursor: pointer;">
-        + Add New Product
-    </button>
-</a>
-<p>Xin chào, <b>
-        <%= user %>
-    </b>! <a href="/logout">Đăng xuất</a></p>
+<!DOCTYPE html>
+<html lang="vi">
 
-<table border="1">
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Actions</th>
-    </tr>
-    <% products.forEach(p=> { %>
-        <tr>
-            <td>
-                <%= p.id %>
-            </td>
-            <td>
-                <%= p.name %>
-            </td>
-            <td>
-                <%= p.price %>
-            </td>
-            <td>
-                <%= p.quantity %>
-            </td>
-            <td>
-                <a href="/edit/<%= p.id %>">Edit</a> |
-                <a href="/delete/<%= p.id %>" onclick="return confirm('Are you sure?')">Delete</a>
-            </td>
-        </tr>
-        <% }) %>
-</table>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý sản phẩm - ShopDB</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="page-header">
+                <h1>📦 Quản lý sản phẩm</h1>
+                <div class="header-actions">
+                    <a href="/add" class="btn btn-success">
+                        ➕ Thêm sản phẩm
+                    </a>
+                    <div class="user-info">
+                        <div class="user-avatar">
+                            <%= user.charAt(0).toUpperCase() %>
+                        </div>
+                        <span>
+                            <%= user %>
+                        </span>
+                    </div>
+                    <a href="/logout" class="btn btn-secondary">
+                        🚪 Đăng xuất
+                    </a>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <% if (products.length===0) { %>
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📦</div>
+                        <h3>Chưa có sản phẩm nào</h3>
+                        <p>Bắt đầu bằng cách thêm sản phẩm đầu tiên của bạn</p>
+                        <a href="/add" class="btn btn-success">➕ Thêm sản phẩm đầu tiên</a>
+                    </div>
+                    <% } else { %>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Giá</th>
+                                    <th>Số lượng</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% products.forEach(p=> {
+                                    let stockClass = 'stock-high';
+                                    if (p.quantity < 5) stockClass='stock-low' ; else if (p.quantity < 15)
+                                        stockClass='stock-medium' ; %>
+                                        <tr>
+                                            <td><strong>#<%= p.id %></strong></td>
+                                            <td>
+                                                <%= p.name %>
+                                            </td>
+                                            <td>
+                                                <span class="price-badge">
+                                                    <%= Number(p.price).toLocaleString('vi-VN') %>đ
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="stock-badge <%= stockClass %>">
+                                                    <%= p.quantity %> sản phẩm
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="/edit/<%= p.id %>" class="btn btn-warning">
+                                                        ✏️ Sửa
+                                                    </a>
+                                                    <a href="/delete/<%= p.id %>" class="btn btn-danger"
+                                                        onclick="return confirm('Bạn có chắc muốn xóa sản phẩm <%= p.name %>?')">
+                                                        🗑️ Xóa
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                            </tbody>
+                        </table>
+
+                        <div
+                            style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; text-align: center; color: #666;">
+                            <strong>📊 Tổng số sản phẩm:</strong>
+                            <%= products.length %> |
+                                <strong>💰 Tổng giá trị:</strong>
+                                <%= products.reduce((sum, p)=> sum + (Number(p.price) * Number(p.quantity)),
+                                    0).toLocaleString('vi-VN') %>đ
+                        </div>
+                        <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
