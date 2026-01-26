@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm sản phẩm mới</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>➕ Thêm sản phẩm mới</h1>
+
+        <form action="/add" method="POST" enctype="multipart/form-data" class="product-form">
+            <div class="form-group">
+                <label for="name">Tên sản phẩm:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Giá (VNĐ):</label>
+                <input type="number" id="price" name="price" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Số lượng tồn kho:</label>
+                <input type="number" id="quantity" name="quantity" min="0" required>
+            </div>
+
+            <div class="form-group">
+                <label for="image">Hình ảnh sản phẩm:</label>
+                <input type="file" id="image" name="image" accept="image/*">
+                <small>Chấp nhận: JPG, PNG, GIF (Tối đa 5MB)</small>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">💾 Lưu sản phẩm</button>
+                <a href="/" class="btn btn-secondary">❌ Hủy</a>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

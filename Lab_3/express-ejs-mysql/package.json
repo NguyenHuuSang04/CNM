@@ -1,0 +1,39 @@
+{
+  "name": "express-ejs-dynamodb",
+  "version": "1.0.0",
+  "description": "Ứng dụng quản lý sản phẩm với Node.js, Express, EJS, DynamoDB và S3",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "setup": "node scripts/create-dynamodb-table.js && node scripts/create-s3-bucket.js",
+    "seed": "node scripts/seed-data.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express",
+    "ejs",
+    "dynamodb",
+    "s3",
+    "aws",
+    "crud",
+    "mvc"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.975.0",
+    "@aws-sdk/client-s3": "^3.975.0",
+    "@aws-sdk/lib-dynamodb": "^3.975.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "multer-s3": "^3.0.1",
+    "uuid": "^13.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
