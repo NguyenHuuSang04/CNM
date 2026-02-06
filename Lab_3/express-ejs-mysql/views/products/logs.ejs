@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử thay đổi - <%= product.name %>
+    </title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .log-entry {
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #4CAF50;
+            border-radius: 4px;
+        }
+
+        .log-entry.UPDATE {
+            border-left-color: #2196F3;
+        }
+
+        .log-entry.DELETE {
+            border-left-color: #f44336;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .log-action {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: white;
+        }
+
+        .log-action.CREATE {
+            background: #4CAF50;
+        }
+
+        .log-action.UPDATE {
+            background: #2196F3;
+        }
+
+        .log-action.DELETE {
+            background: #f44336;
+        }
+
+        .changes-list {
+            margin-top: 10px;
+            padding-left: 20px;
+        }
+
+        .changes-list li {
+            margin: 5px 0;
+        }
+
+        .old-value {
+            color: #f44336;
+            text-decoration: line-through;
+        }
+
+        .new-value {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <h1>📜 Lịch sử thay đổi - <%= product.name %>
+            </h1>
+
+            <div style="margin-bottom: 20px;">
+                <a href="/products" class="btn btn-secondary">← Quay lại danh sách</a>
+                <a href="/products/edit/<%= product.productId %>" class="btn btn-primary">✏️ Sửa sản phẩm</a>
+            </div>
+
+            <% if (logs.length===0) { %>
+                <div style="text-align: center; padding: 40px; background: #f5f5f5; border-radius: 8px;">
+                    <p>Chưa có lịch sử thay đổi nào.</p>
+                </div>
+                <% } else { %>
+                    <% logs.forEach(log=> { %>
+                        <div class="log-entry <%= log.action %>">
+                            <div class="log-header">
+                                <span>
+                                    <span class="log-action <%= log.action %>">
+                                        <% if (log.action==='CREATE' ) { %>➕ TẠO MỚI
+                                            <% } else if (log.action==='UPDATE' ) { %>✏️ CẬP NHẬT
+                                                <% } else if (log.action==='DELETE' ) { %>🗑️ XÓA
+                                                    <% } %>
+                                    </span>
+                                    bởi <strong>
+                                        <%= log.username || 'N/A' %>
+                                    </strong>
+                                </span>
+                                <span>
+                                    <%= new Date(log.timestamp).toLocaleString('vi-VN') %>
+                                </span>
+                            </div>
+
+                            <% if (log.changes) { %>
+                                <% try { const changes=typeof log.changes==='string' ? JSON.parse(log.changes) :
+                                    log.changes; %>
+                                    <div class="changes-list">
+                                        <strong>Thay đổi:</strong>
+                                        <ul>
+                                            <% if (changes.name) { %>
+                                                <li>
+                                                    Tên:
+                                                    <% if (changes.name.old !==undefined) { %>
+                                                        <span class="old-value">
+                                                            <%= changes.name.old %>
+                                                        </span> →
+                                                        <% } %>
+                                                            <span class="new-value">
+                                                                <%= changes.name.new %>
+                                                            </span>
+                                                </li>
+                                                <% } %>
+                                                    <% if (changes.price) { %>
+                                                        <li>
+                                                            Giá:
+                                                            <% if (changes.price.old !==undefined) { %>
+                                                                <span class="old-value">
+                                                                    <%= Number(changes.price.old).toLocaleString('vi-VN')
+                                                                        %> VNĐ
+                                                                </span> →
+                                                                <% } %>
+                                                                    <span class="new-value">
+                                                                        <%= Number(changes.price.new).toLocaleString('vi-VN')
+                                                                            %> VNĐ
+                                                                    </span>
+                                                        </li>
+                                                        <% } %>
+                                                            <% if (changes.quantity) { %>
+                                                                <li>
+                                                                    Số lượng:
+                                                                    <% if (changes.quantity.old !==undefined) { %>
+                                                                        <span class="old-value">
+                                                                            <%= changes.quantity.old %>
+                                                                        </span> →
+                                                                        <% } %>
+                                                                            <span class="new-value">
+                                                                                <%= changes.quantity.new %>
+                                                                            </span>
+                                                                </li>
+                                                                <% } %>
+                                                                    <% if (changes.categoryId) { %>
+                                                                        <li>
+                                                                            Danh mục:
+                                                                            <% if (changes.categoryId.old !==undefined)
+                                                                                { %>
+                                                                                <span class="old-value">
+                                                                                    <%= changes.categoryId.old %>
+                                                                                </span> →
+                                                                                <% } %>
+                                                                                    <span class="new-value">
+                                                                                        <%= changes.categoryId.new %>
+                                                                                    </span>
+                                                                        </li>
+                                                                        <% } %>
+                                                                            <% if (changes.url_image) { %>
+                                                                                <li>Hình ảnh: Đã cập nhật</li>
+                                                                                <% } %>
+                                                                                    <% if (changes.isDeleted) { %>
+                                                                                        <li>Trạng thái: <span
+                                                                                                class="new-value">Đã
+                                                                                                xóa</span></li>
+                                                                                        <% } %>
+                                        </ul>
+                                    </div>
+                                    <% } catch(e) { %>
+                                        <p>Không thể hiển thị chi tiết thay đổi</p>
+                                        <% } %>
+                                            <% } %>
+                        </div>
+                        <% }) %>
+                            <% } %>
+        </div>
+</body>
+
+</html>

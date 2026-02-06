@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa Danh mục</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <h1>✏️ Chỉnh sửa danh mục</h1>
+
+            <form action="/categories/edit/<%= category.categoryId %>" method="POST" class="product-form">
+                <div class="form-group">
+                    <label for="name">Tên danh mục:</label>
+                    <input type="text" id="name" name="name" value="<%= category.name %>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Mô tả:</label>
+                    <textarea id="description" name="description" rows="4"><%= category.description || '' %></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+                    <a href="/categories" class="btn btn-secondary">❌ Hủy</a>
+                </div>
+            </form>
+        </div>
+</body>
+
+</html>

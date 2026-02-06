@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Sản phẩm</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .filter-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .filter-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .filter-group input,
+        .filter-group select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .inventory-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .in-stock {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .low-stock {
+            background: #FF9800;
+            color: white;
+        }
+
+        .out-of-stock {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #f0f0f0;">
+                <h1 style="margin: 0;">📦 Quản lý Sản phẩm</h1>
+                <% if (user && user.role==='admin' ) { %>
+                    <a href="/products/add" class="btn btn-primary" style="margin: 0;">➕ Thêm sản phẩm mới</a>
+                    <% } %>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <form action="/products" method="GET" class="filter-form" id="filterForm">
+                    <div class="filter-group">
+                        <label for="search">Tìm kiếm:</label>
+                        <input type="text" id="search" name="search" placeholder="Nhập tên sản phẩm..."
+                            value="<%= filters.search || '' %>" autocomplete="off">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="categoryId">Danh mục:</label>
+                        <select id="categoryId" name="categoryId">
+                            <option value="">-- Tất cả --</option>
+                            <% categories.forEach(cat=> { %>
+                                <option value="<%= cat.categoryId %>" <%=filters.categoryId===cat.categoryId
+                                    ? 'selected' : '' %>>
+                                    <%= cat.name %>
+                                </option>
+                                <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="minPrice">Giá từ:</label>
+                        <input type="number" id="minPrice" name="minPrice" placeholder="0"
+                            value="<%= filters.minPrice || '' %>">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="maxPrice">Giá đến:</label>
+                        <input type="number" id="maxPrice" name="maxPrice" placeholder="999999999"
+                            value="<%= filters.maxPrice || '' %>">
+                    </div>
+
+                    <div class="filter-group">
+                        <button type="submit" class="btn btn-primary">🔍 Lọc</button>
+                        <a href="/products" class="btn btn-secondary">↻ Xóa lọc</a>
+                    </div>
+                </form>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Danh mục</th>
+                        <th>Giá</th>
+                        <th>Số lượng</th>
+                        <th>Trạng thái</th>
+                        <% if (user && user.role==='admin' ) { %>
+                            <th>Hành động</th>
+                            <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (products.length===0) { %>
+                        <tr>
+                            <td colspan="<%= user && user.role === 'admin' ? 7 : 6 %>" style="text-align: center;">
+                                Chưa có sản phẩm nào.
+                                <% if (user && user.role==='admin' ) { %>
+                                    <a href="/products/add">Thêm sản phẩm đầu tiên</a>
+                                    <% } %>
+                            </td>
+                        </tr>
+                        <% } else { %>
+                            <% products.forEach(product=> {
+                                const category = categories.find(c => c.categoryId === product.categoryId);
+                                %>
+                                <tr>
+                                    <td>
+                                        <% if (product.url_image) { %>
+                                            <img src="<%= product.url_image %>" alt="<%= product.name %>"
+                                                class="product-image">
+                                            <% } else { %>
+                                                <div class="no-image">Không có ảnh</div>
+                                                <% } %>
+                                    </td>
+                                    <td>
+                                        <%= product.name %>
+                                    </td>
+                                    <td>
+                                        <%= category ? category.name : '-' %>
+                                    </td>
+                                    <td>
+                                        <%= Number(product.price).toLocaleString('vi-VN') %> VNĐ
+                                    </td>
+                                    <td>
+                                        <%= product.quantity %>
+                                    </td>
+                                    <td>
+                                        <% if (product.inventoryStatus==='in-stock' ) { %>
+                                            <span class="inventory-status in-stock">Còn hàng</span>
+                                            <% } else if (product.inventoryStatus==='low-stock' ) { %>
+                                                <span class="inventory-status low-stock">Sắp hết</span>
+                                                <% } else { %>
+                                                    <span class="inventory-status out-of-stock">Hết hàng</span>
+                                                    <% } %>
+                                    </td>
+                                    <% if (user && user.role==='admin' ) { %>
+                                        <td class="actions-cell">
+                                            <a href="/products/edit/<%= product.productId %>" class="btn btn-edit">✏️
+                                                Sửa</a>
+                                            <form action="/products/delete/<%= product.productId %>" method="POST"
+                                                style="display: inline;"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa sản phẩm này?');">
+                                                <button type="submit" class="btn btn-delete">🗑️ Xóa</button>
+                                            </form>
+                                            <a href="/products/logs/<%= product.productId %>" class="btn btn-info">📜
+                                                Logs</a>
+                                        </td>
+                                        <% } %>
+                                </tr>
+                                <% }) %>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+
+        <script>
+            // Real-time search
+            const searchInput = document.getElementById('search');
+            const filterForm = document.getElementById('filterForm');
+            let searchTimeout;
+
+            searchInput.addEventListener('input', function () {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(function () {
+                    filterForm.submit();
+                }, 500); // Đợi 500ms sau khi user ngừng gõ
+            });
+
+            // Auto-submit khi thay đổi dropdown
+            document.getElementById('categoryId').addEventListener('change', function () {
+                filterForm.submit();
+            });
+        </script>
+</body>
+
+</html>

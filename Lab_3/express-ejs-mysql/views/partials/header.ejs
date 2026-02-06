@@ -1,0 +1,36 @@
+<header
+    style="background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); color: white; padding: 18px 0; margin-bottom: 30px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+    <div class="header-container"
+        style="display: flex; justify-content: space-between; align-items: center; max-width: 1300px; margin: 0 auto; padding: 0 20px;">
+        <div style="display: flex; gap: 30px; align-items: center;">
+            <h3 style="margin: 0; color: white; font-size: 1.5em; font-weight: 700;">📦 Quản lý Sản phẩm</h3>
+            <nav style="display: flex; gap: 20px;">
+                <a href="/products"
+                    style="color: #ffc107; text-decoration: none; font-weight: 600; transition: all 0.3s; padding: 8px 16px; border-radius: 6px; background: rgba(255, 193, 7, 0.1);">Sản
+                    phẩm</a>
+                <a href="/categories"
+                    style="color: #ffc107; text-decoration: none; font-weight: 600; transition: all 0.3s; padding: 8px 16px; border-radius: 6px; background: rgba(255, 193, 7, 0.1);">Danh
+                    mục</a>
+            </nav>
+        </div>
+        <div style="display: flex; gap: 20px; align-items: center;">
+            <% if (user) { %>
+                <span style="color: #ecf0f1; font-weight: 500;">👤 <%= user.username %> (<%= user.role %>)</span>
+                <a href="/logout"
+                    style="color: #ff6b6b; text-decoration: none; font-weight: 600; padding: 8px 16px; border-radius: 6px; background: rgba(255, 107, 107, 0.15); transition: all 0.3s;">Đăng
+                    xuất</a>
+                <% } %>
+        </div>
+    </div>
+</header>
+
+<style>
+    header a:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 193, 7, 0.2) !important;
+    }
+
+    header a[href="/logout"]:hover {
+        background: rgba(255, 107, 107, 0.3) !important;
+    }
+</style>

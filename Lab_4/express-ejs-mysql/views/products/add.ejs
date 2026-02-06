@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm Sản phẩm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <h1>➕ Thêm Sản phẩm mới</h1>
+
+            <% if (typeof error !=='undefined' && error) { %>
+                <div class="error-message"
+                    style="background: #f44336; color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form action="/products/add" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Tên sản phẩm <span style="color: red;">*</span></label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryId">Danh mục <span style="color: red;">*</span></label>
+                            <select id="categoryId" name="categoryId" required>
+                                <option value="">-- Chọn danh mục --</option>
+                                <% categories.forEach(cat=> { %>
+                                    <option value="<%= cat.categoryId %>">
+                                        <%= cat.name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Giá <span style="color: red;">*</span></label>
+                            <input type="number" id="price" name="price" min="0" step="1000" required>
+                            <small>Đơn vị: VNĐ</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Số lượng <span style="color: red;">*</span></label>
+                            <input type="number" id="quantity" name="quantity" min="0" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image">Hình ảnh</label>
+                            <input type="file" id="image" name="image" accept="image/*">
+                            <small>Chọn file hình ảnh (JPG, PNG, GIF...)</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">💾 Lưu</button>
+                            <a href="/products" class="btn btn-secondary">← Quay lại</a>
+                        </div>
+                    </form>
+        </div>
+</body>
+
+</html>

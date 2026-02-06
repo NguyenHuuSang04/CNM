@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Danh mục</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 3px solid #f0f0f0;">
+                <h1 style="margin: 0;">📁 Quản lý Danh mục</h1>
+                <% if (user && user.role==='admin' ) { %>
+                    <a href="/categories/add" class="btn btn-primary" style="margin: 0;">➕ Thêm danh mục mới</a>
+                    <% } %>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Tên danh mục</th>
+                        <th>Mô tả</th>
+                        <th>Ngày tạo</th>
+                        <% if (user && user.role==='admin' ) { %>
+                            <th>Hành động</th>
+                            <% } %>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (categories.length===0) { %>
+                        <tr>
+                            <td colspan="<%= user && user.role === 'admin' ? 4 : 3 %>" style="text-align: center;">
+                                Chưa có danh mục nào.
+                                <% if (user && user.role==='admin' ) { %>
+                                    <a href="/categories/add">Thêm danh mục đầu tiên</a>
+                                    <% } %>
+                            </td>
+                        </tr>
+                        <% } else { %>
+                            <% categories.forEach(category=> { %>
+                                <tr>
+                                    <td><strong>
+                                            <%= category.name %>
+                                        </strong></td>
+                                    <td>
+                                        <%= category.description || '-' %>
+                                    </td>
+                                    <td>
+                                        <%= new Date(category.createdAt).toLocaleDateString('vi-VN') %>
+                                    </td>
+                                    <% if (user && user.role==='admin' ) { %>
+                                        <td class="actions-cell">
+                                            <a href="/categories/edit/<%= category.categoryId %>"
+                                                class="btn btn-edit">✏️ Sửa</a>
+                                            <form action="/categories/delete/<%= category.categoryId %>" method="POST"
+                                                style="display: inline;"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa danh mục này?');">
+                                                <button type="submit" class="btn btn-delete">🗑️ Xóa</button>
+                                            </form>
+                                        </td>
+                                        <% } %>
+                                </tr>
+                                <% }) %>
+                                    <% } %>
+                </tbody>
+            </table>
+        </div>
+</body>
+
+</html>

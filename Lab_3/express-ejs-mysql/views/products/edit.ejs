@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chỉnh sửa Sản phẩm</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <%- include('../partials/header') %>
+
+        <div class="container">
+            <h1>✏️ Chỉnh sửa Sản phẩm</h1>
+
+            <% if (typeof error !=='undefined' && error) { %>
+                <div class="error-message"
+                    style="background: #f44336; color: white; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <form action="/products/edit/<%= product.productId %>" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label for="name">Tên sản phẩm <span style="color: red;">*</span></label>
+                            <input type="text" id="name" name="name" value="<%= product.name %>" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="categoryId">Danh mục <span style="color: red;">*</span></label>
+                            <select id="categoryId" name="categoryId" required>
+                                <option value="">-- Chọn danh mục --</option>
+                                <% categories.forEach(cat=> { %>
+                                    <option value="<%= cat.categoryId %>" <%=product.categoryId===cat.categoryId
+                                        ? 'selected' : '' %>>
+                                        <%= cat.name %>
+                                    </option>
+                                    <% }) %>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="price">Giá <span style="color: red;">*</span></label>
+                            <input type="number" id="price" name="price" value="<%= product.price %>" min="0"
+                                step="1000" required>
+                            <small>Đơn vị: VNĐ</small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="quantity">Số lượng <span style="color: red;">*</span></label>
+                            <input type="number" id="quantity" name="quantity" value="<%= product.quantity %>" min="0"
+                                required>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Hình ảnh hiện tại</label>
+                            <% if (product.url_image) { %>
+                                <div>
+                                    <img src="<%= product.url_image %>" alt="<%= product.name %>"
+                                        style="max-width: 200px; border-radius: 4px;">
+                                </div>
+                                <% } else { %>
+                                    <p>Chưa có hình ảnh</p>
+                                    <% } %>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="image">Đổi hình ảnh</label>
+                            <input type="file" id="image" name="image" accept="image/*">
+                            <small>Để trống nếu không muốn đổi ảnh</small>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">💾 Cập nhật</button>
+                            <a href="/products" class="btn btn-secondary">← Quay lại</a>
+                            <a href="/products/logs/<%= product.productId %>" class="btn btn-info">📜 Xem Logs</a>
+                        </div>
+                    </form>
+        </div>
+</body>
+
+</html>
