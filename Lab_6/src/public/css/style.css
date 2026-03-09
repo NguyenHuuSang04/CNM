@@ -1,0 +1,58 @@
+/* ── Product thumbnail in table ─────────────────────────────────────────── */
+
+.product-thumbnail {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: transform 0.15s ease;
+}
+
+.product-thumbnail:hover {
+    transform: scale(1.1);
+}
+
+
+/* ── Image preview in add / edit forms ─────────────────────────────────── */
+
+.img-preview {
+    max-width: 220px;
+    max-height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+}
+
+
+/* ── General table refinements ──────────────────────────────────────────── */
+
+.table-hover tbody tr:hover {
+    background-color: rgba(13, 110, 253, 0.04);
+}
+
+
+/* ── Navbar ─────────────────────────────────────────────────────────────── */
+
+.navbar-brand {
+    font-size: 1.2rem;
+    letter-spacing: 0.4px;
+}
+
+
+/* ── Form focus ring ────────────────────────────────────────────────────── */
+
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+
+/* ── Responsive adjustments ─────────────────────────────────────────────── */
+
+@media (max-width: 576px) {
+    .product-thumbnail {
+        width: 48px;
+        height: 48px;
+    }
+}

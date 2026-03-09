@@ -1,0 +1,36 @@
+{
+    "name": "lab_6",
+    "version": "1.0.0",
+    "description": "Ứng dụng quản lý sản phẩm với Node.js, Express, EJS, DynamoDB và S3",
+    "main": "app.js",
+    "scripts": {
+        "start": "node app.js",
+        "dev": "nodemon app.js",
+        "setup": "node scripts/create-table.js"
+    },
+    "keywords": [
+        "nodejs",
+        "express",
+        "ejs",
+        "dynamodb",
+        "s3",
+        "aws",
+        "crud",
+        "mvc"
+    ],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.620.0",
+        "@aws-sdk/client-s3": "^3.620.0",
+        "@aws-sdk/lib-dynamodb": "^3.620.0",
+        "dotenv": "^16.4.5",
+        "ejs": "^3.1.10",
+        "express": "^4.19.2",
+        "multer": "^2.1.1",
+        "uuid": "^10.0.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.4"
+    }
+}
