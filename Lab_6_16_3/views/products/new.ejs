@@ -1,0 +1,9 @@
+<%- include('../partials/header', { title: 'Thêm sản phẩm' }) %>
+
+    <section class="card">
+        <h2>Thêm sản phẩm mới</h2>
+        <%- include('form', { action: '/products' , method: 'POST' , submitText: 'Lưu sản phẩm' , formData, errors,
+            requireImage: true }) %>
+    </section>
+
+    <%- include('../partials/footer') %>

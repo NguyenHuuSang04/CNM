@@ -1,0 +1,70 @@
+<%- include('../partials/header', { title: 'Danh sách sản phẩm' }) %>
+
+    <section class="card">
+        <div class="toolbar">
+            <form class="search-form" method="GET" action="/">
+                <input type="text" name="q" placeholder="Tìm theo tên sản phẩm..." value="<%= q %>" />
+                <button class="btn" type="submit">Tìm kiếm</button>
+                <% if (q) { %>
+                    <a class="btn btn-ghost" href="/">Xóa lọc</a>
+                    <% } %>
+            </form>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Hình ảnh</th>
+                        <th>Tên</th>
+                        <th>Giá</th>
+                        <th>Tồn kho</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% if (products.length===0) { %>
+                        <tr>
+                            <td colspan="5" class="empty">Chưa có sản phẩm nào.</td>
+                        </tr>
+                        <% } %>
+
+                            <% products.forEach((product)=> { %>
+                                <tr>
+                                    <td>
+                                        <% if (product.url_image) { %>
+                                            <img class="thumb" src="<%= product.url_image %>"
+                                                alt="<%= product.name %>" />
+                                            <% } else { %>
+                                                <span class="no-image">No image</span>
+                                                <% } %>
+                                    </td>
+                                    <td>
+                                        <%= product.name %>
+                                    </td>
+                                    <td>
+                                        <%= product.price.toLocaleString('vi-VN') %> đ
+                                    </td>
+                                    <td>
+                                        <%= product.unit_in_stock %>
+                                    </td>
+                                    <td>
+                                        <div class="actions">
+                                            <a class="btn btn-ghost" href="/products/<%= product.id %>">Chi tiết</a>
+                                            <a class="btn" href="/products/<%= product.id %>/edit">Sửa</a>
+                                            <form action="/products/<%= product.id %>?_method=DELETE" method="POST">
+                                                <button class="btn btn-danger" type="submit"
+                                                    onclick="return confirm('Bạn chắc chắn muốn xóa?')">
+                                                    Xóa
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <%- include('../partials/footer') %>

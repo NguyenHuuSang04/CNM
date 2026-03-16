@@ -1,0 +1,207 @@
+<%- include('layout', { body: ` <style>
+    .form-section {
+    background: #f8f9fa;
+    padding: 30px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    border: 2px solid #e9ecef;
+    }
+
+    .form-section h2 {
+    color: #667eea;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+    }
+
+    .form-group {
+    margin-bottom: 20px;
+    }
+
+    .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #495057;
+    }
+
+    .form-group input,
+    .form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 1em;
+    transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    }
+
+    .form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+    }
+
+    .btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 12px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-delete {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 8px 20px;
+    font-size: 0.9em;
+    }
+
+    .products-section h2 {
+    color: #667eea;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+    }
+
+    .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    }
+
+    .product-card {
+    background: white;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    padding: 25px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-card h3 {
+    color: #343a40;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    }
+
+    .product-card .price {
+    color: #667eea;
+    font-size: 1.4em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    }
+
+    .product-card .description {
+    color: #6c757d;
+    margin-bottom: 20px;
+    line-height: 1.6;
+    }
+
+    .product-card .id {
+    color: #adb5bd;
+    font-size: 0.85em;
+    margin-bottom: 15px;
+    }
+
+    .no-products {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    font-size: 1.2em;
+    }
+
+    .no-products svg {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+    opacity: 0.3;
+    }
+
+    ${message ? \`.alert {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    font-weight: 500;
+    }\` : ''}
+    </style>
+
+    ${message ? \`<div class="alert">✓ \${message}</div>\` : ''}
+
+    <div class="form-section">
+        <h2>➕ Thêm Sản phẩm Mới</h2>
+        <form action="/add" method="POST">
+            <div class="form-group">
+                <label for="name">Tên sản phẩm *</label>
+                <input type="text" id="name" name="name" required placeholder="Nhập tên sản phẩm">
+            </div>
+
+            <div class="form-group">
+                <label for="price">Giá *</label>
+                <input type="number" id="price" name="price" step="0.01" required placeholder="Nhập giá sản phẩm">
+            </div>
+
+            <div class="form-group">
+                <label for="description">Mô tả</label>
+                <textarea id="description" name="description" placeholder="Nhập mô tả sản phẩm (tùy chọn)"></textarea>
+            </div>
+
+            <button type="submit" class="btn">Thêm Sản phẩm</button>
+        </form>
+    </div>
+
+    <div class="products-section">
+        <h2>📦 Danh sách Sản phẩm</h2>
+
+        <% if (products && products.length> 0) { %>
+            <div class="products-grid">
+                <% products.forEach(product=> { %>
+                    <div class="product-card">
+                        <h3>
+                            <%= product.name %>
+                        </h3>
+                        <div class="price">$<%= product.price.toFixed(2) %>
+                        </div>
+                        <div class="id">ID: <%= product.id %>
+                        </div>
+                        <div class="description">
+                            <%= product.description || 'Không có mô tả' %>
+                        </div>
+                        <form action="/delete" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="id" value="<%= product.id %>">
+                            <button type="submit" class="btn btn-delete"
+                                onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')">
+                                🗑️ Xóa
+                            </button>
+                        </form>
+                    </div>
+                    <% }) %>
+            </div>
+            <% } else { %>
+                <div class="no-products">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                    </svg>
+                    <p>Chưa có sản phẩm nào. Hãy thêm sản phẩm đầu tiên!</p>
+                </div>
+                <% } %>
+    </div>
+    ` }) %>

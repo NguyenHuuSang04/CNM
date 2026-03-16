@@ -1,0 +1,13 @@
+# Dependencies
+**/node_modules/
+
+# Environment files
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+
+# Upload artifacts
+**/public/uploads/*
+!**/public/uploads/.gitkeep

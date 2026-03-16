@@ -1,0 +1,50 @@
+<% if (errors.length) { %>
+    <div class="alert alert-error">
+        <ul>
+            <% errors.forEach((error)=> { %>
+                <li>
+                    <%= error %>
+                </li>
+                <% }) %>
+        </ul>
+    </div>
+    <% } %>
+
+        <form class="product-form" action="<%= method !== 'POST' ? action + '?_method=' + method : action %>"
+            method="POST" enctype="multipart/form-data">
+
+            <label>
+                Tên sản phẩm
+                <input type="text" name="name" value="<%= formData.name || '' %>" required />
+            </label>
+
+            <label>
+                Giá
+                <input type="number" name="price" min="0" step="1000" value="<%= formData.price ?? '' %>" required />
+            </label>
+
+            <label>
+                Tồn kho
+                <input type="number" name="unit_in_stock" min="0" step="1" value="<%= formData.unit_in_stock ?? '' %>"
+                    required />
+            </label>
+
+            <% if (formData.url_image) { %>
+                <div class="image-section">
+                    <p class="image-label">Ảnh hiện tại</p>
+                    <img class="preview" src="<%= formData.url_image %>" alt="Ảnh hiện tại" />
+                </div>
+                <% } %>
+
+                    <label>
+                        <%= formData.url_image ? 'Ảnh mới (để trống nếu không đổi)' : 'Ảnh sản phẩm' %>
+                            <input type="file" name="url_image" accept="image/*" <%=requireImage ? 'required' : '' %> />
+                    </label>
+
+                    <div class="form-actions">
+                        <button class="btn btn-primary" type="submit">
+                            <%= submitText %>
+                        </button>
+                        <a class="btn btn-ghost" href="/">Hủy</a>
+                    </div>
+        </form>
