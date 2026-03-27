@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh sach ve su kien</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
+</head>
+
+<body class="bg-light" data-alert-message="<%= alertMessage || '' %>">
+    <main class="container py-4">
+        <header class="mb-3">
+            <h1 class="h3 mb-1">Event Tickets</h1>
+            <p class="text-secondary mb-0">Node.js + Express + EJS + DynamoDB + S3</p>
+        </header>
+
+        <section class="d-flex flex-column flex-md-row gap-2 justify-content-between align-items-md-center mb-3">
+            <a href="/tickets/create" class="btn btn-primary">Them ve moi</a>
+            <form action="/tickets" method="GET" class="d-flex flex-column flex-md-row gap-2">
+                <input type="text" name="q" class="form-control" placeholder="Tim ten su kien hoac chu ve"
+                    value="<%= q || '' %>" />
+                <select name="status" class="form-select">
+                    <option value="">Tat ca trang thai</option>
+                    <% (statuses || []).forEach(function(item) { %>
+                        <option value="<%= item %>" <%=(status || '' )===item ? 'selected' : '' %>><%= item %>
+                        </option>
+                        <% }) %>
+                </select>
+                <button type="submit" class="btn btn-outline-primary">Tim</button>
+                <a href="/tickets" class="btn btn-outline-secondary">Bo loc</a>
+            </form>
+        </section>
+
+        <section class="card border-0 shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-primary">
+                            <tr>
+                                <th>Su kien</th>
+                                <th>Chu ve</th>
+                                <th>Category</th>
+                                <th>SL</th>
+                                <th>Gia ve</th>
+                                <th>Thanh tien</th>
+                                <th>Sau giam</th>
+                                <th>Ket qua</th>
+                                <th>Ngay su kien</th>
+                                <th>Status</th>
+                                <th>Anh</th>
+                                <th>Tac vu</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!tickets || tickets.length===0) { %>
+                                <tr>
+                                    <td colspan="12" class="text-center text-secondary py-4">Chua co du lieu ve.</td>
+                                </tr>
+                                <% } %>
+
+                                    <% (tickets || []).forEach(function(ticket) { %>
+                                        <tr>
+                                            <td>
+                                                <%= ticket.eventName || '-' %>
+                                            </td>
+                                            <td>
+                                                <%= ticket.holderName || '-' %>
+                                            </td>
+                                            <td><span class="badge text-bg-info">
+                                                    <%= ticket.category || '-' %>
+                                                </span></td>
+                                            <td>
+                                                <%= ticket.quantity || 0 %>
+                                            </td>
+                                            <td>
+                                                <%= Number(ticket.pricePerTicket || 0).toLocaleString("vi-VN") %> VND
+                                            </td>
+                                            <td>
+                                                <%= Number(ticket.totalAmount || 0).toLocaleString("vi-VN") %> VND
+                                            </td>
+                                            <td>
+                                                <%= Number(ticket.finalAmount || 0).toLocaleString("vi-VN") %> VND
+                                            </td>
+                                            <td>
+                                                <% if (ticket.discountApplied) { %>
+                                                    <span class="badge text-bg-success">Duoc giam gia</span>
+                                                    <% } else { %>
+                                                        <span class="badge text-bg-secondary">Khong giam gia</span>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <%= ticket.eventDate || '-' %>
+                                            </td>
+                                            <td><span class="badge text-bg-light border text-dark">
+                                                    <%= ticket.status || '-' %>
+                                                </span></td>
+                                            <td>
+                                                <% if (ticket.imageUrl) { %>
+                                                    <img src="<%= ticket.imageUrl %>" alt="ticket-image"
+                                                        class="rounded border"
+                                                        style="width: 68px; height: 68px; object-fit: cover;" />
+                                                    <% } else { %>
+                                                        <span class="text-secondary">Khong co</span>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    <a href="/tickets/<%= ticket.ticketId %>"
+                                                        class="btn btn-sm btn-outline-secondary">Chi tiet</a>
+                                                    <a href="/tickets/<%= ticket.ticketId %>/edit"
+                                                        class="btn btn-sm btn-outline-primary">Sua</a>
+                                                    <form action="/tickets/<%= ticket.ticketId %>/delete" method="POST"
+                                                        onsubmit="return confirm('Ban chac chan muon xoa ve nay?');">
+                                                        <button type="submit"
+                                                            class="btn btn-sm btn-outline-danger">Xoa</button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        (function () {
+            var message = document.body.dataset.alertMessage || "";
+            if (!message) return;
+            window.alert(message);
+            var url = new URL(window.location.href);
+            url.searchParams.delete("msg");
+            window.history.replaceState({}, "", url.toString());
+        })();
+    </script>
+</body>
+
+</html>
